@@ -31,9 +31,9 @@ function App() {
   }, [data])
 
   useEffect(() => {
-    // Update the document title using the browser API
     handleJson();
   });
+
   return (
     <MapContainer
       center={currCoords}
@@ -45,11 +45,15 @@ function App() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {!loading && data.features.map(f => {
-        return (
-          <GeoJSON data={f} style={{color: COLORS[f.properties.Level]}}/> 
-        )
-      })}
+      {!loading &&
+        data.features.map((f) => {
+          return (
+            <GeoJSON
+              data={f}
+              style={{ color: COLORS[f.properties.Level] }}
+            />
+          );
+        })}
     </MapContainer>
   );
 }
