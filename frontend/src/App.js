@@ -32,7 +32,7 @@ function App() {
 
   useEffect(() => {
     handleJson();
-  });
+  }, []);
 
   return (
     <MapContainer
@@ -50,7 +50,8 @@ function App() {
           return (
             <GeoJSON
               data={f}
-              style={{ color: COLORS[f.properties.Level] }}
+              // style={{ color: COLORS[f.properties.Level] }}
+              style={{ color: COLORS[Math.floor(Math.random() * 4) + 1] }}
             />
           );
         })}
