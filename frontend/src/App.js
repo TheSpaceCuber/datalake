@@ -1,4 +1,15 @@
-import { MapContainer, TileLayer, GeoJSON, ZoomControl } from "react-leaflet";
+import {
+  Circle,
+  FeatureGroup,
+  LayerGroup,
+  LayersControl,
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  GeoJSON,
+  ZoomControl,
+} from 'react-leaflet'
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Graph from "./Graph";
@@ -49,6 +60,7 @@ function App() {
         <IoMdArrowDropdown size={20} />
       </button>
       {graphOpen && <Graph />}
+
       <MapContainer
         center={currCoords}
         zoom={13}
@@ -56,21 +68,65 @@ function App() {
         scrollWheelZoom={false}
         style={mapStyle}
       >
-        <ZoomControl position="topright" />
+        <LayersControl position="topright">
+          <LayersControl.Overlay name="Marker with popup">
+            <Marker position={currCoords}>
+              <Popup>
+                A pretty CSS3 popup. <br /> Easily customizable.
+              </Popup>
+            </Marker>
+          </LayersControl.Overlay>
+
+          <LayersControl.Overlay checked name="Layer group with circles">
+            <LayerGroup>
+              <Circle
+                center={currCoords}
+                pathOptions={{ fillColor: 'blue' }}
+                radius={200}
+              />
+              <Circle
+                center={currCoords}
+                pathOptions={{ fillColor: 'red' }}
+                radius={100}
+                stroke={false}
+              />
+              <LayerGroup>
+                <Circle
+                  center={[51.51, -0.08]}
+                  pathOptions={{ color: 'green', fillColor: 'green' }}
+                  radius={100}
+                />
+                {!loading &&
+                  data.features.map((f) => {
+                    return (
+                      <GeoJSON
+                        data={f}
+                        // style={{ color: COLORS[f.properties.Level] }}
+                        style={{ color: COLORS[Math.floor(Math.random() * 4) + 1] }}
+                      />
+                    );
+                  })}
+              </LayerGroup>
+            </LayerGroup>
+          </LayersControl.Overlay>
+
+          <LayersControl.Overlay name="Feature group">
+            <FeatureGroup pathOptions={{ color: 'purple' }}>
+              <Popup>Popup in FeatureGroup</Popup>
+              <Circle center={[51.51, -0.06]} radius={200} />
+              {/* <Rectangle bounds={rectangle} /> */}
+            </FeatureGroup>
+          </LayersControl.Overlay>
+
+        </LayersControl>
+
+        <ZoomControl position="topleft" />
+
+
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {!loading &&
-          data.features.map((f) => {
-            return (
-              <GeoJSON
-                data={f}
-                style={{ color: COLORS[f.properties.Level] }}
-                // style={{ color: COLORS[Math.floor(Math.random() * 4) + 1] }}
-              />
-            );
-          })}
       </MapContainer>
     </div>
   );
