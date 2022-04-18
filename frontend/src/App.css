@@ -1,7 +1,13 @@
-button {
+.buttonTopLeft {
   position: absolute;
   z-Index: 1;
   margin: 25px 0 0 10px;
+}
+
+.buttonTopMiddle {
+  position: absolute;
+  z-Index: 1;
+  margin: 25px 0 0 1000px;
 }
 
 .container {
@@ -12,6 +18,17 @@ button {
   justify-content: space-between;
   margin: 25px 45px;
   position: absolute;
+}
+
+.container2 {
+  z-Index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 95%;
+  justify-content: space-between;
+  margin: 25px 1100px;
+  position: absolute;
+  background-color: aliceblue;
 }
 
 .graph {

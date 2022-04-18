@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Graph from "./Graph";
 import { IoMdArrowDropdown } from "react-icons/io";
+import Chart from "./Chart";
 
 function App() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -10,6 +11,7 @@ function App() {
   const [data, setData] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [graphOpen, setGraphOpen] = useState(true);
+  const [chartOpen, setChartOpen] = useState(true);
 
   const currCoords = [1.363649, 103.806181];
   const COLORS = ["#0800ff", "#02f00a", "#ff9900", "#ff1900", "#660a00"];
@@ -43,12 +45,20 @@ function App() {
     setGraphOpen(!graphOpen);
   }
 
+  function handleChartClick() {
+    setChartOpen(!chartOpen);
+  }
+
   return (
     <div>
-      <button onClick={handleClick}>
+      <button className="buttonTopLeft" onClick={handleClick}>
         <IoMdArrowDropdown size={20} />
       </button>
       {graphOpen && <Graph />}
+      <button className="buttonTopMiddle" onClick={handleChartClick}>
+        <IoMdArrowDropdown size={20} />
+      </button>
+      {chartOpen && <Chart />}
       <MapContainer
         center={currCoords}
         zoom={13}
