@@ -1,6 +1,8 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 
+
+# CHANGE THIS (use cs4225-spark bucket instead)
 S3_INPUT_PATH = 's3://cs4225-emr-test/data/survey_results_public.csv'
 S3_OUTPUT_PATH = 's3://cs4225-emr-test/output'
 
