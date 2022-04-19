@@ -18,22 +18,39 @@
 
 5. Cluster will take a while (5-20 mins to provision and launch).
 
-6. Click on "connect to the master node using SSH".
+6. To ensure you have permission to SSH into master node, click on security groups for master, followed by the master security group, followed by edit inbound rules.
 
-![Image5](https://user-images.githubusercontent.com/43946966/164016484-26e2dfdc-f765-4c75-a0c1-391adfa2b04f.png)
 
-7. Follow the instructions. Before you SSH into the master node, you might want to copy your local python file via scp into the master node first.
+![Image5](https://user-images.githubusercontent.com/43946966/164025615-6de3fc20-a439-4ff4-b87a-a1bd6eb3b1e3.png)
+
+7. Ensure that there is an entry SSH with 0.0.0.0 (which means any IP can SSH into the instance), if not, edit the SSH entry to allow from any IPV4 address. Save it.
+
+![Image6](https://user-images.githubusercontent.com/43946966/164026588-34410060-b1af-46db-a65a-0fa1e3bce2c5.png)
+
+
+
+8. Go back and click on "connect to the master node using SSH".
+
+![Image8](https://user-images.githubusercontent.com/43946966/164016484-26e2dfdc-f765-4c75-a0c1-391adfa2b04f.png)
+
+9. Follow the instructions. Before you SSH into the master node, you might want to copy your local python file via scp into the master node first.
 
 ```
 scp -i /path/my-key-pair.pem /path/my-file.txt ec2-user@my-instance-public-dns-name:path/
 
 # example
-scp -i emr-spark test.py hadoop@ec2-13-228-168-31.ap-southeast-1.compute.amazonaws.com:~/.
+scp -i emr-spark.pem test.py hadoop@ec2-13-228-168-31.ap-southeast-1.compute.amazonaws.com:~/.
 ```
 
-![Image6](https://user-images.githubusercontent.com/43946966/164016092-7e74953d-d76a-4d0d-a024-705a9eac15a6.png)
+![Image9](https://user-images.githubusercontent.com/43946966/164016092-7e74953d-d76a-4d0d-a024-705a9eac15a6.png)
 
 ```
 # example according to the photo, but change the fields accordingly
 ssh -i emr-spark.pem hadoop@ec2-13-228-168-31.ap-southeast-1.compute.amazonaws.com
 ```
+Full example:
+![Image10](https://user-images.githubusercontent.com/43946966/164027080-c212cb49-d41d-481b-ac45-2b0c74b60a25.png)]
+
+10. Terminate the instance manually if you're done.
+
+![Image11](https://user-images.githubusercontent.com/43946966/164027367-ac916b97-07e2-4269-af67-791b2bafaec3.png)]
