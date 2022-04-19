@@ -87,15 +87,12 @@ function App() {
           <LayersControl.Overlay name="Taxi Availability Layer">
             <LayerGroup>
               {!loading &&
-                taxiData.features.map((f) => {
+                taxiData.features.map((res) => {
                   return (
                     <Marker
                       icon={taxiIcon}
-                      position={[
-                        f.geometry.coordinates[1],
-                        f.geometry.coordinates[0],
-                      ]}
-                    ></Marker>
+                      position={res.coordinates}
+                    />
                   );
                 })}
             </LayerGroup>
