@@ -1,13 +1,26 @@
-import { MapContainer, TileLayer, GeoJSON, ZoomControl } from "react-leaflet";
+import {
+  Circle,
+  FeatureGroup,
+  LayerGroup,
+  LayersControl,
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  GeoJSON,
+  ZoomControl,
+} from "react-leaflet";
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Graph from "./Graph";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { icon } from "leaflet";
 
 function App() {
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
-  const [data, setData] = useState(undefined);
+  const [taxiData, setTaxiData] = useState(undefined);
+  const [roadData, setRoadData] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [graphOpen, setGraphOpen] = useState(true);
 
@@ -23,20 +36,33 @@ function App() {
     zIndex: "0",
   };
 
+  const taxiIcon = icon({
+    iconUrl: "taxi.png",
+    iconSize: [32, 37],
+    iconAnchor: [16, 37],
+  });
+
   useEffect(() => {
-    if (data !== undefined) {
+    if (roadData !== undefined && taxiData !== undefined) {
       setLoading(false);
     }
-  }, [data]);
+  }, [taxiData, roadData]);
 
   useEffect(() => {
-    handleJson();
+    handleTaxiJson();
+    handleRoadJson();
   }, []);
 
-  const handleJson = () => {
+  const handleTaxiJson = () => {
+    fetch("./taxiavailablitylatest.json")
+      .then((res) => res.json())
+      .then((data) => setTaxiData(data));
+  };
+
+  const handleRoadJson = () => {
     fetch("./sample.json")
       .then((res) => res.json())
-      .then((data) => setData(data));
+      .then((data) => setRoadData(data));
   };
 
   function handleClick() {
@@ -49,6 +75,7 @@ function App() {
         <IoMdArrowDropdown size={20} />
       </button>
       {graphOpen && <Graph />}
+
       <MapContainer
         center={currCoords}
         zoom={13}
@@ -56,21 +83,52 @@ function App() {
         scrollWheelZoom={false}
         style={mapStyle}
       >
-        <ZoomControl position="topright" />
+        <LayersControl position="topright">
+          <LayersControl.Overlay name="Taxi Availability Layer">
+            <LayerGroup>
+              {!loading &&
+                taxiData.features.map((f) => {
+                  return (
+                    <Marker
+                      icon={taxiIcon}
+                      position={[
+                        f.geometry.coordinates[1],
+                        f.geometry.coordinates[0],
+                      ]}
+                    ></Marker>
+                  );
+                })}
+            </LayerGroup>
+          </LayersControl.Overlay>
+
+          <LayersControl.Overlay checked name="Congestion Layer">
+            <LayerGroup>
+              {!loading &&
+                roadData.features.map((f) => {
+                  return (
+                    <GeoJSON
+                      data={f}
+                      style={{ color: COLORS[f.properties.Level] }}
+                    />
+                  );
+                })}
+            </LayerGroup>
+          </LayersControl.Overlay>
+
+          <LayersControl.Overlay name="Feature group">
+            <FeatureGroup pathOptions={{ color: "purple" }}>
+              <Popup>Popup in FeatureGroup</Popup>
+              <Circle center={[51.51, -0.06]} radius={200} />
+            </FeatureGroup>
+          </LayersControl.Overlay>
+        </LayersControl>
+
+        <ZoomControl position="bottomright" />
+
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {!loading &&
-          data.features.map((f) => {
-            return (
-              <GeoJSON
-                data={f}
-                style={{ color: COLORS[f.properties.Level] }}
-                // style={{ color: COLORS[Math.floor(Math.random() * 4) + 1] }}
-              />
-            );
-          })}
       </MapContainer>
     </div>
   );
