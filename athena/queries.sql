@@ -1,4 +1,3 @@
--- rainfall table
 CREATE EXTERNAL TABLE IF NOT EXISTS rainfall (
   station_id STRING,
   value FLOAT,
@@ -12,10 +11,17 @@ CREATE EXTERNAL TABLE IF NOT EXISTS rainfall (
   LOCATION 's3://cs4225-rainfall/outputs/'
   TBLPROPERTIES ("skip.header.line.count"="1");
 
--- rainfall query
-SELECT station_id, value, from_iso8601_timestamp(datetime) AS datetime FROM rainfall
+CREATE EXTERNAL TABLE IF NOT EXISTS carparkAvailability (
+  Development STRING,
+  AvailableLots INTEGER,
+  datetime STRING
+  ) 
+  ROW FORMAT DELIMITED
+  FIELDS TERMINATED BY ','
+  LINES TERMINATED BY '\n'
+  LOCATION 's3://cs4225-carpark-availability/outputs/'
+  TBLPROPERTIES ("skip.header.line.count"="1");
 
--- estimatedTravelTime table
 CREATE EXTERNAL TABLE IF NOT EXISTS estimatedTravelTime (
   StartPoint STRING,
   EndPoint FLOAT,
@@ -28,5 +34,11 @@ CREATE EXTERNAL TABLE IF NOT EXISTS estimatedTravelTime (
   LOCATION 's3://cs4225-estimated-travel-times/outputs/'
   TBLPROPERTIES ("skip.header.line.count"="1");
 
--- estimatedTravelTime query
+
+SELECT station_id, value, from_iso8601_timestamp(datetime) AS datetime FROM rainfall
+
+SELECT AvailableLots, from_iso8601_timestamp(datetime) AS datetime FROM carparkAvailability
+
 SELECT EstTime, from_iso8601_timestamp(datetime) AS datetime FROM estimatedTravelTime
+
+
