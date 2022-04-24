@@ -1,11 +1,8 @@
 import {
-  Circle,
-  FeatureGroup,
   LayerGroup,
   LayersControl,
   MapContainer,
   Marker,
-  Popup,
   TileLayer,
   GeoJSON,
   ZoomControl,
@@ -22,7 +19,7 @@ function App() {
   const [taxiData, setTaxiData] = useState(undefined);
   const [roadData, setRoadData] = useState(undefined);
   const [loading, setLoading] = useState(true);
-  const [graphOpen, setGraphOpen] = useState(true);
+  const [graphOpen, setGraphOpen] = useState(false);
 
   const currCoords = [1.363649, 103.806181];
   const COLORS = ["#0800ff", "#02f00a", "#ff9900", "#ff1900", "#660a00"];
@@ -78,7 +75,7 @@ function App() {
 
       <MapContainer
         center={currCoords}
-        zoom={13}
+        zoom={12}
         zoomControl={false}
         scrollWheelZoom={false}
         style={mapStyle}
@@ -110,13 +107,6 @@ function App() {
                   );
                 })}
             </LayerGroup>
-          </LayersControl.Overlay>
-
-          <LayersControl.Overlay name="Feature group">
-            <FeatureGroup pathOptions={{ color: "purple" }}>
-              <Popup>Popup in FeatureGroup</Popup>
-              <Circle center={[51.51, -0.06]} radius={200} />
-            </FeatureGroup>
           </LayersControl.Overlay>
         </LayersControl>
 
