@@ -29,16 +29,12 @@ CREATE EXTERNAL TABLE IF NOT EXISTS estimatedTravelTime (
   datetime STRING
   ) 
   ROW FORMAT DELIMITED
-  FIELDS TERMINATED BY ','
+  FIELDS TERMINATED BY ','                                                 
   LINES TERMINATED BY '\n'
   LOCATION 's3://cs4225-estimated-travel-times/outputs/'
   TBLPROPERTIES ("skip.header.line.count"="1");
 
 
-SELECT station_id, value, from_iso8601_timestamp(datetime) AS datetime FROM rainfall
-
+SELECT from_iso8601_timestamp(SUBSTRING(datetime, 1, 16)) AS time, value FROM rainfall WHERE station_id = 'S215' ORDER BY time                                                                                                                                                      SELECT value, CAST(datetime AS TIMESTAMP date) FROM rainfall
 SELECT AvailableLots, from_iso8601_timestamp(datetime) AS datetime FROM carparkAvailability
-
 SELECT EstTime, from_iso8601_timestamp(datetime) AS datetime FROM estimatedTravelTime
-
-
